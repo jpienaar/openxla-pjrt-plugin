@@ -1315,7 +1315,8 @@ PJRT_Error* ClientInstance::Compile(PJRT_Program* program,
 
       llvm::cl::TokenizeGNUCommandLine(*envValue, saver, newArgv);
       // TODO: This could probably be combined into a SetFlags call.
-      for (auto arg : newArgv) job->SetFlag(arg);
+      for (auto arg : newArgv)
+        if (!job->SetFlag(arg)) return MakeCompilerError(*job);
     }
     if (artifact_tx) {
       artifact_tx->WriteArtifact(
