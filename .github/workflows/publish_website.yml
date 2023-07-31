@@ -42,6 +42,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/website
-      - name: Deploying to gh-pages
-        working-directory: docs/website
-        run: mkdocs gh-deploy
