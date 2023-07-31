@@ -61,7 +61,7 @@ class ReleaseFetcher:
 
 def main(args):
     fetcher = ReleaseFetcher(repo=args.repo)
-    with sys.stdout if args.output == "-" else open(args.output, "x") as f:
+    with sys.stdout if args.output == "-" else open(args.output, "w+") as f:
         f.write(
             textwrap.dedent(
                 """\
