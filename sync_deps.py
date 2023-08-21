@@ -8,8 +8,8 @@
 
 PINNED_VERSIONS = {
   "iree": "5bfc37a0170491929c5da8c1fd719a56078da49f",
-  "xla": "51c0ad464e05c18098df7b771a7e02e1ad86dd27",
-  "jax": "b4a628400f59b84a0a0bc47e828b389fc9c34bfd"
+  "xla": "0cd1ee17e85183b60e6680cfb8b32729dee1acc3",
+  "jax": "a14d64b160633db17048eea7732ed21380751389"
 }
 
 ORIGINS = {
