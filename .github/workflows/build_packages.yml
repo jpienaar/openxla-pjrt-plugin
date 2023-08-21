@@ -39,15 +39,6 @@ jobs:
         with:
           ref: ${{ github.event.inputs.commit }}
 
-      - id: "gcp-auth"
-        name: "Authenticating to Google Cloud"
-        if: github.event_name != 'pull_request'
-        uses: "google-github-actions/auth@v1"
-        with:
-          token_format: "access_token"
-          credentials_json: "${{ secrets.IREE_OSS_GITHUB_RUNNER_BASIC_TRUST_SERVICE_ACCOUNT_KEY }}"
-          create_credentials_file: true
-
       - name: "Setting up Python"
         uses: actions/setup-python@75f3110429a8c05be0e1bf360334e4cced2b63fa # v2.3.3
         with:
@@ -60,9 +51,6 @@ jobs:
 
       - name: Build Packages (Linux)
         env:
-          # Note if gcp-auth didn't run, this will be empty because GitHub
-          # Actions generally just fails silently. Useful, in this case.
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.gcp-auth.outputs.credentials_file_path }}
           # GitHub Actions horrible excuse for a ternary
           write_caches: ${{ github.event_name != 'pull_request' && 1 || 0 }}
           package_suffix: ${{ github.event.inputs.package_suffix }}
