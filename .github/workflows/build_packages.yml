@@ -31,7 +31,7 @@ concurrency:
 
 # Jobs are organized into groups and topologically sorted by dependencies
 jobs:
-  runs-on: linux
+  runs-on: ubuntu-22.04
   build:
     steps:
       - name: "Checking out repository"
