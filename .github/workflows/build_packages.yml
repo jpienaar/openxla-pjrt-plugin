@@ -54,7 +54,6 @@ jobs:
           # GitHub Actions horrible excuse for a ternary
           write_caches: ${{ github.event_name != 'pull_request' && 1 || 0 }}
           package_suffix: ${{ github.event.inputs.package_suffix }}
-          packages: "python-cpu-wheel,python-cuda-wheel"
           output_dir: "${{ github.workspace }}/bindist"
         run: |
           set -euo pipefail
