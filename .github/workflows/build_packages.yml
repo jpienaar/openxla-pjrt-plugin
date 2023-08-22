@@ -31,6 +31,7 @@ concurrency:
 
 # Jobs are organized into groups and topologically sorted by dependencies
 jobs:
+  runs-on: linux
   build:
     steps:
       - name: "Checking out repository"
