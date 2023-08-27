@@ -9,7 +9,7 @@
 PINNED_VERSIONS = {
   "iree": "87b920ea9b036a2a359b4c3b3ebda7caa45adad9",
   "xla": "1c22df67539a85904b4f686bcbe69efd518a5698",
-  "jax": "841baabd3ffa63b27fa1c4199adc65fbf073c7c0"
+  "jax": "66c04001528e9a27de050a005d8e8eaacf3fcda9"
 }
 
 ORIGINS = {
