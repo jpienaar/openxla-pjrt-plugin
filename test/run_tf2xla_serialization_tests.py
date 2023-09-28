@@ -36,31 +36,6 @@ def _harness_matches(harness, group_name, dtype, params):
 
 _CRASH_LIST_PARMS = []
 
-# TODO: These aren't being verified yet.
-_DEFAULT_TOLERANCE = {
-    jax.dtypes.float0: 0,
-    np.dtype(np.bool_): 0,
-    np.dtype(ml_dtypes.int4): 0,
-    np.dtype(np.int8): 0,
-    np.dtype(np.int16): 0,
-    np.dtype(np.int32): 0,
-    np.dtype(np.int64): 0,
-    np.dtype(ml_dtypes.uint4): 0,
-    np.dtype(np.uint8): 0,
-    np.dtype(np.uint16): 0,
-    np.dtype(np.uint32): 0,
-    np.dtype(np.uint64): 0,
-    np.dtype(ml_dtypes.float8_e4m3b11fnuz): 1e-1,
-    np.dtype(ml_dtypes.float8_e4m3fn): 1e-1,
-    np.dtype(ml_dtypes.float8_e5m2): 1e-1,
-    np.dtype(ml_dtypes.bfloat16): 1e-2,
-    np.dtype(np.float16): 1e-3,
-    np.dtype(np.float32): 1e-6,
-    np.dtype(np.float64): 1e-15,
-    np.dtype(np.complex64): 1e-6,
-    np.dtype(np.complex128): 1e-15,
-}
-
 
 def _dtype(x):
   if hasattr(x, "dtype"):
@@ -80,51 +55,11 @@ def tolerance(dtype, tol=None):
   return tol.get(dtype, _DEFAULT_TOLERANCE[dtype])
 
 
-def _assert_numpy_allclose(a, b, atol=None, rtol=None, err_msg=""):
-  """Checks if two numpy arrays are all close given tolerances.
-
-  Args:
-    a: The array to check.
-    b: The expected array.
-    atol: Absolute tolerance.
-    rtol: Relative tolerance.
-    err_msg: The error message to print in case of failure.
-  """
-  if a.dtype == b.dtype == jax.dtypes.float0:
-    np.testing.assert_array_equal(a, b, err_msg=err_msg)
-    return
-  custom_dtypes = [
-      ml_dtypes.float8_e4m3b11fnuz,
-      ml_dtypes.float8_e4m3fn,
-      ml_dtypes.float8_e5m2,
-      ml_dtypes.bfloat16,
-  ]
-  a = a.astype(np.float32) if a.dtype in custom_dtypes else a
-  b = b.astype(np.float32) if b.dtype in custom_dtypes else b
-  kw = {}
-  if atol:
-    kw["atol"] = atol
-  if rtol:
-    kw["rtol"] = rtol
-  with np.errstate(invalid="ignore"):
-    # TODO(phawkins): surprisingly, assert_allclose sometimes reports invalid
-    # value errors. It should not do that.
-    np.testing.assert_allclose(a, b, **kw, err_msg=err_msg)
-
-
 @contextlib.contextmanager
 def ignore_warning(**kw):
   with warnings.catch_warnings():
     warnings.filterwarnings("ignore", **kw)
     yield
-
-
-def _make_tf_input_signature(*tf_args) -> list[tf.TensorSpec]:
-  # tf_args can be PyTrees
-  def _make_one_array_signature(tf_arg):
-    return tf.TensorSpec(np.shape(tf_arg), jax2tf.dtype_of_val(tf_arg))
-
-  return tf.nest.map_structure(_make_one_array_signature, list(tf_args))
 
 
 def _has_only_supported_dtypes(harness):
